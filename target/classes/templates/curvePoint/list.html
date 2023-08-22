@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"/>
+<title>Home</title>
+<link rel="stylesheet" href="../../css/bootstrap.min.css" >
+</head>
+<body>
+<div class="container">
+	<div class="col-6">
+		<a href="/">Home</a>&nbsp;|&nbsp;
+		<a href="/bidList/list">Bid List</a>&nbsp;|&nbsp;
+		<a href="/curvePoint/list">Curve Points</a>&nbsp;|&nbsp;
+		<a href="/rating/list">Ratings</a>&nbsp;|&nbsp;
+		<a href="/trade/list">Trade</a>&nbsp;|&nbsp;
+		<a href="/ruleName/list">Rule</a> |&nbsp;
+		<a href="/user/list">User</a>
+	</div>
+	<div class="row"><h2>Curve Point List</h2></div>
+	<div class="row">
+		<a href="/curvePoint/add" class="btn btn-primary btn-sm">Add New</a>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>CurvePointId</th>
+					<th>Term</th>
+					<th>Value</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="curvePoint : ${curvePoints.content}">
+					<td style="width: 10%" th:text="${curvePoint.id}"></td>
+					<td th:text="${curvePoint.id}"></td>
+					<td th:text="${#numbers.formatDecimal(curvePoint.getTerm(), 1, 2)}"></td>
+					<td th:text="${#numbers.formatDecimal(curvePoint.getValue(), 1, 2)}"></td>
+					<td style="width: 15%" class="text-center">
+						<a th:href="@{/curvePoint/update/{id}(id=${curvePoint.id})}">Edit</a>&nbsp;|&nbsp;
+						<a th:href="@{/curvePoint/delete/{id}(id=${curvePoint.id})}">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="align-content-center">
+			<div th:if="${curvePoints.totalPages > 1}">
+				<ul class="pagination">
+					<li th:if="${curvePoints.hasPrevious}" class="page-item">
+						<a th:href="@{${'/curvePoint/list?page=' + (curvePoints.number - 1)}}" class="page-link">Previous</a>
+					</li>
+					<li th:each="pageNumber : ${#numbers.sequence(0, curvePoints.totalPages - 1)}" class="page-item">
+						<a th:href="@{${'/curvePoint/list?page=' + pageNumber}}" th:classappend="${pageNumber == curvePoints.number} ? 'active' : ''" class="page-link" th:text="${pageNumber + 1}"></a>
+					</li>
+					<li th:if="${curvePoints.hasNext}" class="page-item">
+						<a th:href="@{${'/curvePoint/list?page=' + (curvePoints.number + 1)}}" class="page-link">Next</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
